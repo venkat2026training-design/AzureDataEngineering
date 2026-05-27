@@ -1,0 +1,15 @@
+{
+	"name": "valaxytechadf",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6d8818ff-f288-449c-8fa2-862a7eb15d91",
+		"tenantId": "1508efd1-d77a-4e6c-b824-079509ca60e6"
+	}
+}

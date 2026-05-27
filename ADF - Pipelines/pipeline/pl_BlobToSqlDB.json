@@ -1,0 +1,146 @@
+{
+	"name": "pl_BlobToSqlDB",
+	"properties": {
+		"description": "Scans datasets/ folder in Blob Storage, loads every .csv file into a SQL table with the same name (extension stripped). Tables are auto-created from CSV headers.",
+		"activities": [
+			{
+				"name": "GetFileList",
+				"description": "Lists all items inside the datasets/ folder",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.01:00:00",
+					"retry": 1,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_BlobFolder",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": false,
+						"enablePartitionDiscovery": false
+					}
+				}
+			},
+			{
+				"name": "FilterCSVOnly",
+				"description": "Keeps only files ending in .csv",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "GetFileList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('GetFileList').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@endswith(item().name, '.csv')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEachCSVFile",
+				"description": "Processes each CSV file in parallel (up to 10 at a time)",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "FilterCSVOnly",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('FilterCSVOnly').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"batchCount": 10,
+					"activities": [
+						{
+							"name": "CopyCSVtoSQL",
+							"description": "Copies one CSV file into SQL table named after the file",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": false,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate",
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_BlobCSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"fileName": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_SqlTable",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@replace(item().name, '.csv', '')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-05-21T08:30:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

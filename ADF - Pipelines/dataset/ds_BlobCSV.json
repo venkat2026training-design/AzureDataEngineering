@@ -1,0 +1,35 @@
+{
+	"name": "ds_BlobCSV",
+	"properties": {
+		"description": "Parameterized CSV dataset — pass fileName at runtime",
+		"linkedServiceName": {
+			"referenceName": "ls_BlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileName": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().fileName",
+					"type": "Expression"
+				},
+				"folderPath": "datasets",
+				"container": "maybarch-adlsgen2"
+			},
+			"columnDelimiter": ",",
+			"encodingName": "UTF-8",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
