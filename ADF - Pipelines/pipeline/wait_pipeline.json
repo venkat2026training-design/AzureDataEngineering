@@ -1,0 +1,20 @@
+{
+	"name": "wait_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Waiting Time",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"folder": {
+			"name": "GitHub_Source_Project"
+		},
+		"annotations": []
+	}
+}
