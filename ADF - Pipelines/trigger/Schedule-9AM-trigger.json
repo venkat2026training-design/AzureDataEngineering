@@ -1,0 +1,17 @@
+{
+	"name": "Schedule-9AM-trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2026-05-27T05:27:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
