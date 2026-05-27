@@ -1,0 +1,29 @@
+{
+	"name": "ds_customer_Json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cust_json",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"P_ds_target_file_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().P_ds_target_file_name",
+					"type": "Expression"
+				},
+				"folderPath": "customer",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

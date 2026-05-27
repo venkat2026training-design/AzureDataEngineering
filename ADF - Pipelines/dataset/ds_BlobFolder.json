@@ -1,0 +1,20 @@
+{
+	"name": "ds_BlobFolder",
+	"properties": {
+		"description": "Points to datasets/ folder — used by GetMetadata to list all files",
+		"linkedServiceName": {
+			"referenceName": "ls_BlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "datasets",
+				"container": "maybarch-adlsgen2"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

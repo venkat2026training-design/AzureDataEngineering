@@ -1,0 +1,78 @@
+{
+	"name": "CopyBlobToadls",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Customers",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_cust_01",
+						"type": "DatasetReference",
+						"parameters": {
+							"P_ds_source_file_name": {
+								"value": "@pipeline().parameters.Pipeline_source_filename",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_customer_Json",
+						"type": "DatasetReference",
+						"parameters": {
+							"P_ds_target_file_name": {
+								"value": "@pipeline().parameters.Pipeline_target_filename",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"Pipeline_source_filename": {
+				"type": "string"
+			},
+			"Pipeline_target_filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-05-14T17:49:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
