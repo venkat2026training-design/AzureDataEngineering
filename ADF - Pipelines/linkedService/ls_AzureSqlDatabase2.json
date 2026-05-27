@@ -1,0 +1,23 @@
+{
+	"name": "ls_AzureSqlDatabase2",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "demoserver202605.database.windows.net",
+			"database": "demodb",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "admin2026",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "demodb-password"
+			}
+		}
+	}
+}
