@@ -1,0 +1,20 @@
+{
+	"name": "Dummy_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait-Sleep",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 5
+				}
+			}
+		],
+		"folder": {
+			"name": "GitHub_Source_Project"
+		},
+		"annotations": []
+	}
+}
