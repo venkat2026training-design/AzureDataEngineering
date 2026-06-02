@@ -1344,11 +1344,22 @@ CREATE EXTERNAL LOCATION `ext-loc-gold`
   WITH (STORAGE CREDENTIAL `sc-adls-dev`);
 
 -- 3. Catalog and schemas
-CREATE CATALOG IF NOT EXISTS dev_catalog;
+-- MANAGED LOCATION is required — without it managed tables go to Databricks Default Storage (not your ADLS)
+CREATE CATALOG IF NOT EXISTS dev_catalog
+MANAGED LOCATION 'abfss://metastore@valaxystadlsunitycatalog.dfs.core.windows.net/dev_catalog/';
+
 USE CATALOG dev_catalog;
-CREATE SCHEMA IF NOT EXISTS bronze;
-CREATE SCHEMA IF NOT EXISTS silver;
-CREATE SCHEMA IF NOT EXISTS gold;
+
+-- Schemas inherit the catalog MANAGED LOCATION automatically.
+-- Explicit MANAGED LOCATION below overrides per layer if you want separate containers.
+CREATE SCHEMA IF NOT EXISTS bronze
+MANAGED LOCATION 'abfss://bronze@valaxystadlsunitycatalog.dfs.core.windows.net/managed/';
+
+CREATE SCHEMA IF NOT EXISTS silver
+MANAGED LOCATION 'abfss://silver@valaxystadlsunitycatalog.dfs.core.windows.net/managed/';
+
+CREATE SCHEMA IF NOT EXISTS gold
+MANAGED LOCATION 'abfss://gold@valaxystadlsunitycatalog.dfs.core.windows.net/managed/';
 
 -- 4. Bronze managed table
 CREATE TABLE IF NOT EXISTS dev_catalog.bronze.customers (
