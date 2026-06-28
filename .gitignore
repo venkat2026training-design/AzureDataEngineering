@@ -1,0 +1,12 @@
+# Exclude HTML files from Synapse folder
+**/*.html
+
+# Exclude advanced notebook
+**/04_notebook_pyspark_advanced.ipynb
+
+# IDE and OS files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
